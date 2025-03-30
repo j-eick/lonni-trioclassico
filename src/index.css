@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-deep-black text-cream antialiased;
+    }
+
+    .bb {
+        border: 1px solid red;
+    }
+}
+
+@layer components {
+    .glass-card {
+        @apply bg-black/20 backdrop-blur-md border border-white/5;
+    }
+
+    .glass-morphism {
+        @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-2xl;
+    }
+
+    .luxury-button {
+        @apply px-8 py-3 bg-luxury-gold text-luxury-black font-semibold rounded-md 
+           hover:bg-opacity-90 transition-all duration-300 relative overflow-hidden
+           hover:shadow-lg hover:shadow-luxury-gold/20;
+    }
+
+    .luxury-button::before {
+        content: "";
+        @apply absolute inset-0 bg-white/20 transform -translate-x-full;
+        transition: transform 0.6s ease;
+    }
+
+    .luxury-button:hover::before {
+        @apply translate-x-0;
+    }
+
+    .elegant-border {
+        @apply relative;
+    }
+
+    .elegant-border::after {
+        content: "";
+        @apply absolute bottom-0 left-1/2 w-0 h-0.5 bg-luxury-gold;
+        transition: all 0.3s ease;
+    }
+
+    .elegant-border:hover::after {
+        @apply w-full left-0;
+    }
+
+    .elegant-heading {
+        @apply font-display tracking-wider;
+    }
+
+    .classic-text {
+        @apply font-sans leading-relaxed;
+    }
+
+    .elegant-link {
+        @apply relative overflow-hidden hover:text-luxury-gold transition-colors duration-300;
+    }
+
+    .elegant-link::after {
+        @apply content-[''] absolute bottom-0 left-0 w-0 h-px bg-luxury-gold transition-all duration-300 ease-in-out;
+    }
+
+    .elegant-link:hover::after {
+        @apply w-full;
+    }
+
+    .classic-button {
+        @apply px-8 py-3 font-display tracking-widest uppercase text-sm transition-all duration-300;
+    }
+
+    .primary-button {
+        @apply classic-button bg-luxury-gold text-deep-black hover:bg-luxury-gold/90 hover:shadow-elegant;
+    }
+
+    .secondary-button {
+        @apply classic-button border border-luxury-gold/30 text-cream hover:border-luxury-gold hover:bg-luxury-gold/10;
+    }
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}

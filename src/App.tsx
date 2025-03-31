@@ -79,11 +79,14 @@ function App() {
                     {/* Main Content Layout */}
                     <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
                         {/* Image Container */}
-                        <div className="relative w-48 md:w-64 flex-shrink-0">
+                        <div
+                            className={`relative w-48 flex-shrink-0 
+                                        md:w-64`}
+                        >
                             <Image
                                 src={trioImg}
                                 alt="Trio Classico"
-                                className="rounded-lg shadow-lg"
+                                className="rounded-lg shadow-lg border-[1px] border-luxury-gold/30"
                             />
                         </div>
 

@@ -122,58 +122,39 @@ function App() {
                 </ContentSection>
 
                 {/* Die Gäste Section */}
-                <section
-                    id="gaste"
-                    className="min-h-screen flex items-center justify-center px-4 py-20"
-                >
-                    <div className="relative z-10 max-w-6xl w-full mx-auto">
-                        <div className="relative bg-white/[0.01] backdrop-blur-lg p-16 shadow-elegant border border-white/[0.02] rounded-lg">
-                            <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">
-                                Die Gäste
-                            </h2>
-                            <div className="grid md:grid-cols-2 gap-8">
-                                {/* Placeholder for guest cards */}
-                                <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
-                                    <h3 className="text-xl text-luxury-gold mb-4">Gast 1</h3>
-                                    <p className="text-cream/90">Beschreibung des ersten Gastes...</p>
-                                </div>
-                                <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
-                                    <h3 className="text-xl text-luxury-gold mb-4">Gast 2</h3>
-                                    <p className="text-cream/90">Beschreibung des zweiten Gastes...</p>
-                                </div>
-                            </div>
+                <ContentSection id="gaste">
+                    <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">Die Gäste</h2>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {/* Placeholder for guest cards */}
+                        <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
+                            <h3 className="text-xl text-luxury-gold mb-4">Gast 1</h3>
+                            <p className="text-cream/90">Beschreibung des ersten Gastes...</p>
+                        </div>
+                        <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
+                            <h3 className="text-xl text-luxury-gold mb-4">Gast 2</h3>
+                            <p className="text-cream/90">Beschreibung des zweiten Gastes...</p>
                         </div>
                     </div>
-                </section>
+                </ContentSection>
 
-                {/* Das Programm Section */}
-                <section
-                    id="programm"
-                    className="min-h-screen flex items-center justify-center px-4 py-20"
-                >
-                    <div className="relative z-10 max-w-6xl w-full mx-auto">
-                        <div className="relative bg-white/[0.01] backdrop-blur-lg p-16 shadow-elegant border border-white/[0.02] rounded-lg">
-                            <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">
-                                Das Programm
-                            </h2>
-                            <div className="space-y-8">
-                                {/* Placeholder for program items */}
-                                <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
-                                    <h3 className="text-xl text-luxury-gold mb-4">Programm 1</h3>
-                                    <p className="text-cream/90">Beschreibung des ersten Programmpunkts...</p>
-                                </div>
-                                <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
-                                    <h3 className="text-xl text-luxury-gold mb-4">Programm 2</h3>
-                                    <p className="text-cream/90">Beschreibung des zweiten Programmpunkts...</p>
-                                </div>
-                                <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
-                                    <h3 className="text-xl text-luxury-gold mb-4">Programm 3</h3>
-                                    <p className="text-cream/90">Beschreibung des dritten Programmpunkts...</p>
-                                </div>
-                            </div>
+                <ContentSection id="programm">
+                    <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">Das Programm</h2>
+                    <div className="space-y-8">
+                        {/* Placeholder for program items */}
+                        <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
+                            <h3 className="text-xl text-luxury-gold mb-4">Programm 1</h3>
+                            <p className="text-cream/90">Beschreibung des ersten Programmpunkts...</p>
+                        </div>
+                        <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
+                            <h3 className="text-xl text-luxury-gold mb-4">Programm 2</h3>
+                            <p className="text-cream/90">Beschreibung des zweiten Programmpunkts...</p>
+                        </div>
+                        <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
+                            <h3 className="text-xl text-luxury-gold mb-4">Programm 3</h3>
+                            <p className="text-cream/90">Beschreibung des dritten Programmpunkts...</p>
                         </div>
                     </div>
-                </section>
+                </ContentSection>
             </main>
         </div>
     );

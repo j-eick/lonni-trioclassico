@@ -68,7 +68,15 @@ function App() {
                     className="fixed z-10 -bottom-20 -right-32 top-32 opacity-[.045]"
                 />
                 <HeroSection id="willkommen">
-                    {/* Content Layout */}
+                    {/* Welcome Text */}
+                    <div className="text-center mb-12">
+                        <h2 className="font-display text-luxury-gold tracking-[0.3em] uppercase mb-4 text-[clamp(0.875rem,2vw,1.125rem)]">
+                            Willkommen
+                        </h2>
+                        <div className="h-px w-full bg-luxury-gold/30 mx-auto mb-6" />
+                    </div>
+
+                    {/* Main Content Layout */}
                     <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
                         {/* Image Container */}
                         <div className="relative w-48 md:w-64 flex-shrink-0">
@@ -81,17 +89,13 @@ function App() {
 
                         {/* Text Content */}
                         <div className="text-center md:text-left flex-1">
-                            <h2 className="font-display text-luxury-gold text-sm tracking-[0.3em] uppercase mb-4">
-                                Willkommen
-                            </h2>
-                            <h1 className="elegant-heading text-4xl md:text-6xl lg:text-7xl mb-6 text-cream">
+                            <h1 className="elegant-heading text-[clamp(2.5rem,5vw,4.5rem)] mb-6 text-cream">
                                 Trio <span className="text-luxury-gold">Classico</span>
                             </h1>
-                            <p className="classic-text text-lg md:text-xl lg:text-2xl text-cream/90 mb-8 max-w-2xl mx-auto md:mx-0">
+                            <p className="classic-text text-[clamp(1.125rem,2vw,1.5rem)] text-cream/90 mb-8 max-w-2xl mx-auto md:mx-0">
                                 Klassik auf historischen Instrumenten
                             </p>
-                            <div className="h-px w-24 bg-luxury-gold/30 mx-auto md:mx-0 mb-6" />
-                            <p className="text-cream/80 text-sm md:text-base max-w-xl mx-auto md:mx-0">
+                            <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-cream/80 max-w-xl mx-auto md:mx-0">
                                 Entdecken Sie die Magie der klassischen Musik, interpretiert auf historischen
                                 Instrumenten
                             </p>

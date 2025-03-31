@@ -16,6 +16,18 @@ module.exports = {
                 serif: ["Playfair Display", "serif"],
                 display: ["Cinzel", "serif"],
             },
+            fontSize: {
+                //--- Hero Section ---
+                hero_title: "clamp(2.5rem, 5vw, 4.5rem)",
+                hero_text: "clamp(1.5rem, 1vw, 3rem)",
+                hero_subText: "clamp(1.125rem, .5vw, 2rem)",
+
+                //--- Sizes ---
+                regular: "clamp(1.5rem, 1vw, 3rem)",
+                smaller: "clamp(1.125rem, .5vw, 2rem)",
+                small: "clamp(.875rem, 1vw, 1rem)",
+                large: "clamp(2.5rem, 5vw, 4.5rem)",
+            },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
             },

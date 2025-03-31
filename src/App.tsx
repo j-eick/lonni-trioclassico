@@ -89,13 +89,21 @@ function App() {
 
                         {/* Text Content */}
                         <div className="text-center md:text-left flex-1">
-                            <h1 className="elegant-heading text-[clamp(2.5rem,5vw,4.5rem)] mb-6 text-cream">
-                                Trio <span className="text-luxury-gold">Classico</span>
+                            <h1
+                                className={`relative h-[calc(2_*_clamp(2rem,5vw,4.5rem))] mb-6 
+                                            flex flex-col elegant-heading text-center
+                                            text-hero_title text-cream`}
+                            >
+                                <span className="absolute w-full -top-4 text-cream text-center md:text-left">Trio</span>
+                                <span className="absolute w-full -bottom-4 text-luxury-gold text-center md:text-left">
+                                    Classico
+                                </span>
                             </h1>
-                            <p className="classic-text text-[clamp(1.125rem,2vw,1.5rem)] text-cream/90 mb-8 max-w-2xl mx-auto md:mx-0">
+
+                            <p className={`classic-text text-hero_text text-cream/90 mb-8`}>
                                 Klassik auf historischen Instrumenten
                             </p>
-                            <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-cream/80 max-w-xl mx-auto md:mx-0">
+                            <p className={`text-hero_subText text-cream/80`}>
                                 Entdecken Sie die Magie der klassischen Musik, interpretiert auf historischen
                                 Instrumenten
                             </p>

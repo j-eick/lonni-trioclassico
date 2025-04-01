@@ -5,8 +5,145 @@ import trioImg from "./assets/trio.jpg";
 import Image from "./components/ui/Image";
 import HeroSection from "./components/HeroSection";
 import ContentSection from "./components/ContentSection";
+import { useEffect, useRef, useState } from "react";
+
+type GradientData = {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+};
 
 function App() {
+    // Create a ref to hold our gradient elements.
+    const gradientsRef = useRef<(HTMLDivElement | null)[]>([]);
+    // State to hold the random starting positions and sizes.
+    const [gradientsData, setGradientsData] = useState<GradientData[]>([]);
+
+    // Generate unique random positions and sizes on mount.
+    useEffect(() => {
+        const generateUniqueData = (count: number, minDistance: number) => {
+            const data: GradientData[] = [];
+            for (let i = 0; i < count; i++) {
+                let newItem: GradientData;
+                // Force first 2 gradients to be on the left half of the viewport.
+                if (i < 2) {
+                    newItem = {
+                        top: Math.random() * window.innerHeight,
+                        left: Math.random() * (window.innerWidth / 2),
+                        width: 150 + Math.random() * (450 - 150), // random between 150 and 450
+                        height: 150 + Math.random() * (450 - 150),
+                    };
+                } else {
+                    newItem = {
+                        top: Math.random() * window.innerHeight,
+                        left: Math.random() * window.innerWidth,
+                        width: 150 + Math.random() * (450 - 150),
+                        height: 150 + Math.random() * (450 - 150),
+                    };
+                }
+
+                // Check that newItem is at least minDistance from all existing items.
+                const isUnique = data.every(item => {
+                    const dx = item.left - newItem.left;
+                    const dy = item.top - newItem.top;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    return distance >= minDistance;
+                });
+                if (isUnique) {
+                    data.push(newItem);
+                } else {
+                    // Retry by decrementing i to generate a valid item for this slot.
+                    i--;
+                }
+            }
+            return data;
+        };
+
+        // For example, enforce a 50px minimum distance between positions.
+        const uniqueData = generateUniqueData(4, 50);
+        setGradientsData(uniqueData);
+    }, []);
+
+    // Animation effect: apply floating and pulse animation to each gradient.
+    useEffect(() => {
+        if (gradientsData.length !== 4) return;
+        // Get the gradient elements.
+        const gradients = gradientsRef.current.filter(Boolean) as HTMLDivElement[];
+
+        // Record base positions (and current opacity) from inline styles.
+        const basePositions = gradients.map(gradient => {
+            const style = window.getComputedStyle(gradient);
+            return {
+                top: parseFloat(style.top),
+                left: parseFloat(style.left),
+                opacity: parseFloat(style.opacity || "1"),
+            };
+        });
+
+        // Animation parameters for each gradient.
+        const animations = [
+            {
+                speed: 0.09,
+                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+                pulseSpeed: 0.5,
+                pulseRange: 0.05,
+            },
+            {
+                speed: 0.08,
+                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+                pulseSpeed: 0.3,
+                pulseRange: 0.03,
+            },
+            {
+                speed: 0.1,
+                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+                pulseSpeed: 0.4,
+                pulseRange: 0.07,
+            },
+            {
+                speed: 0.12,
+                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+                pulseSpeed: 0.2,
+                pulseRange: 0.04,
+            },
+            {
+                speed: 0.2,
+                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+                pulseSpeed: 0.8,
+                pulseRange: 0.04,
+            },
+        ];
+
+        let startTime: number | null = null;
+        let animationFrameId: number;
+
+        const animate = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const elapsed = (timestamp - startTime) / 1000; // seconds
+
+            gradients.forEach((gradient, index) => {
+                const anim = animations[index];
+                const base = basePositions[index];
+
+                // Calculate offsets for a smooth floating effect.
+                const xOffset = Math.sin(elapsed * anim.speed) * anim.range.x;
+                const yOffset = Math.cos(elapsed * anim.speed * 0.7) * anim.range.y;
+                // Calculate a pulse effect on opacity.
+                const pulse = Math.sin(elapsed * anim.pulseSpeed) * anim.pulseRange;
+                const currentOpacity = base.opacity + pulse;
+
+                gradient.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                gradient.style.opacity = currentOpacity.toString();
+            });
+
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        animationFrameId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [gradientsData]);
+
     const scrollToSection = (sectionId: string) => {
         const element = document.getElementById(sectionId);
         if (element) {
@@ -24,18 +161,41 @@ function App() {
         { id: "programm", label: "Unser Programm" },
     ];
 
-    return (
-        <div className="min-h-screen relative overflow-hidden">
-            {/* Base Background */}
-            <div className="absolute inset-0 bg-rich-black" />
+    // Define the gradient background classes for each gradient.
+    const gradientClasses = [
+        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.12)_15%,_transparent_35%)]",
+        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.08)_5%,_transparent_25%)]",
+        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.1)_8%,_transparent_20%)]",
+        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.13)_12%,_transparent_28%)]",
+        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.15)_10%,_transparent_20%)]",
+    ];
 
-            {/* Subtle Accent Lines */}
-            <div className="absolute inset-0">
-                <div className="absolute top-0 left-0 w-full h-px bg-luxury-gold/15" />
-                <div className="absolute bottom-0 left-0 w-full h-px bg-luxury-gold/15" />
-                <div className="absolute left-0 top-0 h-full w-px bg-luxury-gold/15" />
-                <div className="absolute right-0 top-0 h-full w-px bg-luxury-gold/15" />
-            </div>
+    return (
+        <div className="relative min-h-screen overflow-hidden">
+            {/* <div className="fixed -z-10 top-[15%] left-[60%] right-[10%] bottom-[-15rem] bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.0)_20%,_transparent_50%)] " /> */}
+
+            {/* Gradient Variations */}
+            {/* Gradient Variations */}
+            {gradientsData.length === 4 && (
+                <>
+                    {gradientsData.map((data, i) => (
+                        <div
+                            key={i}
+                            ref={el => {
+                                gradientsRef.current[i] = el;
+                            }}
+                            style={{
+                                top: data.top,
+                                left: data.left,
+                                width: data.width,
+                                height: data.height,
+                                position: "fixed",
+                            }}
+                            className={`fixed -z-10 ${gradientClasses[i]}`}
+                        />
+                    ))}
+                </>
+            )}
 
             {/* Corner Logo */}
             <div className="fixed top-0 left-0 z-50">
@@ -69,7 +229,7 @@ function App() {
                 />
                 <HeroSection id="willkommen">
                     {/* Welcome Text */}
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-12 ">
                         <h2 className="font-display text-luxury-gold tracking-[0.3em] uppercase mb-4 text-[clamp(0.875rem,2vw,1.125rem)]">
                             Willkommen
                         </h2>

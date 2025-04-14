@@ -23,7 +23,7 @@ export default function HeroSection({ id, className = "", children }: HeroSectio
                 <div className="absolute -z-10 inset-0 bg-gradient-to-r from-luxury-gold/[0.2] to-transparent rounded-lg" />
                 <div className="absolute -z-10 inset-0 bg-gradient-to-tr from-luxury-gold/[0.045] to-transparent rounded-lg" />
                 {/* Main Content */}
-                <div className="relative bg-white/[0.02] backdrop-blur-[6px] p-8 md:p-16 shadow-elegant border border-white/[0.09] rounded-lg group">
+                <div className="relative bg-white/[0.02] backdrop-blur-[8px] p-8 md:p-16 shadow-elegant border border-white/[0.09] rounded-lg group">
                     {/* Inner Glow */}
                     <div
                         className={`absolute -z-10 inset-0 bg-gradient-to-br from-luxury-gold/[0.09] to-transparent rounded-lg opacity-0

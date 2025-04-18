@@ -210,7 +210,6 @@ function App() {
                     <Logo
                         href="/"
                         height="h-20"
-                        className="opacity-90 hover:opacity-100 transition-all duration-500"
                     />
                 </div>
             </div>

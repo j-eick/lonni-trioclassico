@@ -10,9 +10,9 @@ export default function ContentSection({ id, className = "", children }: Content
     return (
         <section
             id={id}
-            className={`min-h-screen flex items-center justify-center px-4  py-20 ${className}`}
+            className={`min-h-screen flex items-center justify-center px-24 py-20 ${className}`}
         >
-            <div className="relative z-10 max-w-6xl w-full mx-auto">
+            <div className="relative z-10 max-w-5xl w-full mx-auto">
                 <div className="absolute -z-10 inset-0 bg-gradient-to-br from-luxury-gold/[0.18] via-luxury-gold/[0.05] to-transparent via-40% to-80% rounded-lg" />
                 <div className="absolute -z-10 inset-0 bg-gradient-to-br from-luxury-gold/[0.05] to-transparent to-50% rounded-lg" />
                 {/* Main Content */}

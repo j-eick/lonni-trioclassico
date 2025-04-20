@@ -1,6 +1,7 @@
 import Logo from "./components/ui/logo/Logo";
 import TribalPattern from "./components/ui/TribalPattern";
 import Navigation from "./components/Navigation";
+import VerticalNav from "./components/VerticalNav";
 import trioImg from "./assets/trio.jpg";
 import Image from "./components/ui/Image";
 import HeroSection from "./components/HeroSection";
@@ -214,8 +215,12 @@ function App() {
                 </div>
             </div>
 
-            {/* Navigation */}
+            {/* Navigation Components */}
             <Navigation
+                scrollToSection={scrollToSection}
+                items={navItems}
+            />
+            <VerticalNav
                 scrollToSection={scrollToSection}
                 items={navItems}
             />

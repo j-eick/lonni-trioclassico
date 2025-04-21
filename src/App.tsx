@@ -6,88 +6,19 @@ import trioImg from "./assets/trio.jpg";
 import Image from "./components/ui/Image";
 import HeroSection from "./components/HeroSection";
 import ContentSection from "./components/ContentSection";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-
-type GradientData = {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-};
+import { useEffect, useRef, useState } from "react";
+import { generateUniqueData, type GradientData } from "./func/gradients";
+import { getAnimationConfigs, gradientClasses } from "./func/animations";
 
 function App() {
     const gradientsRef = useRef<(HTMLDivElement | null)[]>([]);
     const [gradientsData, setGradientsData] = useState<GradientData[]>([]);
-
-    const generateUniqueData = useCallback((count: number, minDistance: number) => {
-        const data: GradientData[] = [];
-        for (let i = 0; i < count; i++) {
-            let newItem: GradientData;
-            if (i < 2) {
-                newItem = {
-                    top: Math.random() * window.innerHeight,
-                    left: Math.random() * (window.innerWidth / 2),
-                    width: 150 + Math.random() * 300,
-                    height: 150 + Math.random() * 300,
-                };
-            } else {
-                newItem = {
-                    top: Math.random() * window.innerHeight,
-                    left: Math.random() * window.innerWidth,
-                    width: 150 + Math.random() * 300,
-                    height: 150 + Math.random() * 300,
-                };
-            }
-
-            const isUnique = data.every(item => {
-                const dx = item.left - newItem.left;
-                const dy = item.top - newItem.top;
-                return Math.hypot(dx, dy) >= minDistance;
-            });
-
-            if (isUnique) {
-                data.push(newItem);
-            } else {
-                i--;
-            }
-        }
-        return data;
-    }, []);
-
-    const animations = useMemo(
-        () => [
-            {
-                speed: 0.09,
-                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-                pulseSpeed: 0.5,
-                pulseRange: 0.05,
-            },
-            {
-                speed: 0.08,
-                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-                pulseSpeed: 0.3,
-                pulseRange: 0.03,
-            },
-            {
-                speed: 0.1,
-                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-                pulseSpeed: 0.4,
-                pulseRange: 0.07,
-            },
-            {
-                speed: 0.12,
-                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-                pulseSpeed: 0.2,
-                pulseRange: 0.04,
-            },
-        ],
-        []
-    );
+    const animations = getAnimationConfigs();
 
     useEffect(() => {
         const uniqueData = generateUniqueData(4, 50);
         setGradientsData(uniqueData);
-    }, [generateUniqueData]);
+    }, []);
 
     useEffect(() => {
         if (gradientsData.length !== 4) return;
@@ -110,7 +41,6 @@ function App() {
             if (!startTime) startTime = timestamp;
             const deltaTime = timestamp - lastTimestamp;
 
-            // Only update if more than 16ms (roughly 60fps) have passed
             if (deltaTime >= 16) {
                 const elapsed = (timestamp - startTime) / 1000;
                 lastTimestamp = timestamp;
@@ -150,14 +80,6 @@ function App() {
         { id: "kunstlerinnen", label: "Die Künstlerinnen" },
         { id: "gaste", label: "Gäste" },
         { id: "programm", label: "Unser Programm" },
-    ];
-
-    const gradientClasses = [
-        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.12)_15%,_transparent_35%)]",
-        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.08)_5%,_transparent_25%)]",
-        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.1)_8%,_transparent_20%)]",
-        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.13)_12%,_transparent_28%)]",
-        "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.15)_10%,_transparent_20%)]",
     ];
 
     return (

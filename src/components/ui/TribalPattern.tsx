@@ -1,21 +1,21 @@
-import tribalImage from "../../assets/tribal.png"; // adjust the path if needed
+import { memo } from "react";
+import tribalImage from "../../assets/tribal.png";
 
 type TribalPatternProps = {
     className?: string;
     size?: number;
 };
 
-function TribalPattern({ className, size = 50 }: TribalPatternProps) {
+const TribalPattern = memo(function TribalPattern({ className, size = 50 }: TribalPatternProps) {
     return (
         <div className={`pointer-events-none select-none ${className}`}>
             <img
                 src={tribalImage}
                 alt="Decorative tribal pattern"
-                className={`w-[${size}vw] h-auto`}
-                style={{ objectFit: "contain" }}
+                style={{ width: `${size}vw`, height: "auto", objectFit: "contain" }}
             />
         </div>
     );
-}
+});
 
 export default TribalPattern;

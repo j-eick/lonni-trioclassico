@@ -6,7 +6,7 @@ import trioImg from "./assets/trio.jpg";
 import Image from "./components/ui/Image";
 import HeroSection from "./components/HeroSection";
 import ContentSection from "./components/ContentSection";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
 type GradientData = {
     top: number;
@@ -16,74 +16,46 @@ type GradientData = {
 };
 
 function App() {
-    // Create a ref to hold our gradient elements.
     const gradientsRef = useRef<(HTMLDivElement | null)[]>([]);
-    // State to hold the random starting positions and sizes.
     const [gradientsData, setGradientsData] = useState<GradientData[]>([]);
 
-    // Generate unique random positions and sizes on mount.
-    useEffect(() => {
-        const generateUniqueData = (count: number, minDistance: number) => {
-            const data: GradientData[] = [];
-            for (let i = 0; i < count; i++) {
-                let newItem: GradientData;
-                // Force first 2 gradients to be on the left half of the viewport.
-                if (i < 2) {
-                    newItem = {
-                        top: Math.random() * window.innerHeight,
-                        left: Math.random() * (window.innerWidth / 2),
-                        width: 150 + Math.random() * (450 - 150), // random between 150 and 450
-                        height: 150 + Math.random() * (450 - 150),
-                    };
-                } else {
-                    newItem = {
-                        top: Math.random() * window.innerHeight,
-                        left: Math.random() * window.innerWidth,
-                        width: 150 + Math.random() * (450 - 150),
-                        height: 150 + Math.random() * (450 - 150),
-                    };
-                }
-
-                // Check that newItem is at least minDistance from all existing items.
-                const isUnique = data.every(item => {
-                    const dx = item.left - newItem.left;
-                    const dy = item.top - newItem.top;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    return distance >= minDistance;
-                });
-                if (isUnique) {
-                    data.push(newItem);
-                } else {
-                    // Retry by decrementing i to generate a valid item for this slot.
-                    i--;
-                }
+    const generateUniqueData = useCallback((count: number, minDistance: number) => {
+        const data: GradientData[] = [];
+        for (let i = 0; i < count; i++) {
+            let newItem: GradientData;
+            if (i < 2) {
+                newItem = {
+                    top: Math.random() * window.innerHeight,
+                    left: Math.random() * (window.innerWidth / 2),
+                    width: 150 + Math.random() * 300,
+                    height: 150 + Math.random() * 300,
+                };
+            } else {
+                newItem = {
+                    top: Math.random() * window.innerHeight,
+                    left: Math.random() * window.innerWidth,
+                    width: 150 + Math.random() * 300,
+                    height: 150 + Math.random() * 300,
+                };
             }
-            return data;
-        };
 
-        // For example, enforce a 50px minimum distance between positions.
-        const uniqueData = generateUniqueData(4, 50);
-        setGradientsData(uniqueData);
+            const isUnique = data.every(item => {
+                const dx = item.left - newItem.left;
+                const dy = item.top - newItem.top;
+                return Math.hypot(dx, dy) >= minDistance;
+            });
+
+            if (isUnique) {
+                data.push(newItem);
+            } else {
+                i--;
+            }
+        }
+        return data;
     }, []);
 
-    // Animation effect: apply floating and pulse animation to each gradient.
-    useEffect(() => {
-        if (gradientsData.length !== 4) return;
-        // Get the gradient elements.
-        const gradients = gradientsRef.current.filter(Boolean) as HTMLDivElement[];
-
-        // Record base positions (and current opacity) from inline styles.
-        const basePositions = gradients.map(gradient => {
-            const style = window.getComputedStyle(gradient);
-            return {
-                top: parseFloat(style.top),
-                left: parseFloat(style.left),
-                opacity: parseFloat(style.opacity || "1"),
-            };
-        });
-
-        // Animation parameters for each gradient.
-        const animations = [
+    const animations = useMemo(
+        () => [
             {
                 speed: 0.09,
                 range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
@@ -108,42 +80,60 @@ function App() {
                 pulseSpeed: 0.2,
                 pulseRange: 0.04,
             },
-            {
-                speed: 0.2,
-                range: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-                pulseSpeed: 0.8,
-                pulseRange: 0.04,
-            },
-        ];
+        ],
+        []
+    );
+
+    useEffect(() => {
+        const uniqueData = generateUniqueData(4, 50);
+        setGradientsData(uniqueData);
+    }, [generateUniqueData]);
+
+    useEffect(() => {
+        if (gradientsData.length !== 4) return;
+
+        const gradients = gradientsRef.current.filter(Boolean) as HTMLDivElement[];
+        const basePositions = gradients.map(gradient => {
+            const style = window.getComputedStyle(gradient);
+            return {
+                top: parseFloat(style.top),
+                left: parseFloat(style.left),
+                opacity: parseFloat(style.opacity || "1"),
+            };
+        });
 
         let startTime: number | null = null;
         let animationFrameId: number;
+        let lastTimestamp = 0;
 
         const animate = (timestamp: number) => {
             if (!startTime) startTime = timestamp;
-            const elapsed = (timestamp - startTime) / 1000; // seconds
+            const deltaTime = timestamp - lastTimestamp;
 
-            gradients.forEach((gradient, index) => {
-                const anim = animations[index];
-                const base = basePositions[index];
+            // Only update if more than 16ms (roughly 60fps) have passed
+            if (deltaTime >= 16) {
+                const elapsed = (timestamp - startTime) / 1000;
+                lastTimestamp = timestamp;
 
-                // Calculate offsets for a smooth floating effect.
-                const xOffset = Math.sin(elapsed * anim.speed) * anim.range.x;
-                const yOffset = Math.cos(elapsed * anim.speed * 0.7) * anim.range.y;
-                // Calculate a pulse effect on opacity.
-                const pulse = Math.sin(elapsed * anim.pulseSpeed) * anim.pulseRange;
-                const currentOpacity = base.opacity + pulse;
+                gradients.forEach((gradient, index) => {
+                    const anim = animations[index];
+                    const base = basePositions[index];
 
-                gradient.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-                gradient.style.opacity = currentOpacity.toString();
-            });
+                    const xOffset = Math.sin(elapsed * anim.speed) * anim.range.x;
+                    const yOffset = Math.cos(elapsed * anim.speed * 0.7) * anim.range.y;
+                    const pulse = Math.sin(elapsed * anim.pulseSpeed) * anim.pulseRange;
+
+                    gradient.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                    gradient.style.opacity = (base.opacity + pulse).toString();
+                });
+            }
 
             animationFrameId = requestAnimationFrame(animate);
         };
 
         animationFrameId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [gradientsData]);
+    }, [gradientsData, animations]);
 
     const scrollToSection = (sectionId: string) => {
         const element = document.getElementById(sectionId);
@@ -162,7 +152,6 @@ function App() {
         { id: "programm", label: "Unser Programm" },
     ];
 
-    // Define the gradient background classes for each gradient.
     const gradientClasses = [
         "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.12)_15%,_transparent_35%)]",
         "bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.08)_5%,_transparent_25%)]",
@@ -173,10 +162,6 @@ function App() {
 
     return (
         <div className="relative min-h-screen overflow-hidden">
-            {/* <div className="fixed -z-10 top-[15%] left-[60%] right-[10%] bottom-[-15rem] bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.0)_20%,_transparent_50%)] " /> */}
-
-            {/* Gradient Variations */}
-            {/* Gradient Variations */}
             {gradientsData.length === 4 && (
                 <>
                     {gradientsData.map((data, i) => (
@@ -198,15 +183,12 @@ function App() {
                 </>
             )}
 
-            {/* Corner Logo */}
             <div className="fixed top-0 left-0 z-50">
-                {/* Logo Background */}
                 <div className="absolute top-0 left-0 w-[400px] h-[300px]">
                     <div className="absolute inset-0 bg-gradient-to-br from-luxury-gold/[0.05] via-transparent to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-transparent" />
                 </div>
 
-                {/* Logo Container */}
                 <div className="relative pl-12 pt-8 group">
                     <Logo
                         href="/"
@@ -215,7 +197,6 @@ function App() {
                 </div>
             </div>
 
-            {/* Navigation Components */}
             <Navigation
                 scrollToSection={scrollToSection}
                 items={navItems}
@@ -225,14 +206,12 @@ function App() {
                 items={navItems}
             />
 
-            {/* Main Content */}
             <main className="relative">
                 <TribalPattern
-                    size={15}
+                    size={80}
                     className="fixed z-10 -bottom-20 -right-32 top-32 opacity-[.045]"
                 />
                 <HeroSection id="willkommen">
-                    {/* Welcome Text */}
                     <div className="text-center mb-12 ">
                         <h2 className="font-display text-luxury-gold tracking-[0.3em] uppercase mb-4 text-[clamp(0.875rem,2vw,1.125rem)]">
                             Willkommen
@@ -240,9 +219,7 @@ function App() {
                         <div className="h-px w-full bg-luxury-gold/30 mx-auto mb-6" />
                     </div>
 
-                    {/* Main Content Layout */}
                     <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-                        {/* Image Container */}
                         <div
                             className={`relative w-48 flex-shrink-0 
                                         md:w-64`}
@@ -254,7 +231,6 @@ function App() {
                             />
                         </div>
 
-                        {/* Text Content */}
                         <div className="text-center md:text-left flex-1">
                             <h1
                                 className={`relative h-[calc(2_*_clamp(2rem,5vw,4.5rem))] mb-6 
@@ -278,13 +254,11 @@ function App() {
                     </div>
                 </HeroSection>
 
-                {/* Die Künstlerinnen Section */}
                 <ContentSection id="kunstlerinnen">
                     <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">
                         Die Künstlerinnen
                     </h2>
                     <div className="grid md:grid-cols-3 gap-8">
-                        {/* Placeholder for artist cards */}
                         <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
                             <h3 className="text-xl text-luxury-gold mb-4">Künstlerin 1</h3>
                             <p className="text-cream/90">Beschreibung der ersten Künstlerin...</p>
@@ -300,11 +274,9 @@ function App() {
                     </div>
                 </ContentSection>
 
-                {/* Die Gäste Section */}
                 <ContentSection id="gaste">
                     <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">Die Gäste</h2>
                     <div className="grid md:grid-cols-2 gap-8">
-                        {/* Placeholder for guest cards */}
                         <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
                             <h3 className="text-xl text-luxury-gold mb-4">Gast 1</h3>
                             <p className="text-cream/90">Beschreibung des ersten Gastes...</p>
@@ -319,7 +291,6 @@ function App() {
                 <ContentSection id="programm">
                     <h2 className="font-display text-4xl md:text-5xl mb-12 text-cream text-center">Das Programm</h2>
                     <div className="space-y-8">
-                        {/* Placeholder for program items */}
                         <div className="bg-white/[0.01] p-6 rounded-lg border border-white/[0.02]">
                             <h3 className="text-xl text-luxury-gold mb-4">Programm 1</h3>
                             <p className="text-cream/90">Beschreibung des ersten Programmpunkts...</p>

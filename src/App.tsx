@@ -119,20 +119,22 @@ function App() {
                 </div>
             </div>
 
+            <TribalPattern
+                size={80}
+                className="fixed z-10 -bottom-20 -right-32 top-32 opacity-[.045]"
+            />
+
             <Navigation
                 scrollToSection={scrollToSection}
                 items={navItems}
             />
+
             <VerticalNav
                 scrollToSection={scrollToSection}
                 items={navItems}
             />
 
             <main className="relative">
-                <TribalPattern
-                    size={80}
-                    className="fixed z-10 -bottom-20 -right-32 top-32 opacity-[.045]"
-                />
                 <HeroSection id="willkommen">
                     <div className="text-center mb-12 ">
                         <h2 className="font-display text-luxury-gold tracking-[0.3em] uppercase mb-4 text-[clamp(0.875rem,2vw,1.125rem)]">

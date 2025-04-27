@@ -37,6 +37,12 @@ module.exports = {
             boxShadow: {
                 elegant: "0 0 60px -10px rgba(0, 0, 0, 0.75)",
             },
+            spacing: {
+                vNav_to_r_viewPort: "clamp(5rem, 10vw, 100rem)",
+            },
+            width: {
+                section: "clamp(32rem, 60vw, 64rem)",
+            },
             animation: {
                 "fade-in": "fadeIn 0.5s ease-out",
             },

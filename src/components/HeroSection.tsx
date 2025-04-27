@@ -13,7 +13,7 @@ export default function HeroSection({ id, className = "", children }: HeroSectio
             className={`min-h-screen flex items-center justify-center px-24 ${className}`}
         >
             {/* Content Container */}
-            <div className={`relative z-10 max-w-5xl w-full mx-auto duration-700 transition-opacity`}>
+            <div className={`relative z-10 w-section mx-auto duration-700 transition-opacity`}>
                 {/* Glass Effect Layers */}
                 <div className="absolute -z-10 inset-0 bg-gradient-to-br from-luxury-gold/[0.18] via-luxury-gold/[0.05] to-transparent via-40% to-50% rounded-lg" />
                 <div className="absolute -z-10 inset-0 bg-gradient-to-br from-luxury-gold/[0.05] to-transparent to-50% rounded-lg" />

@@ -16,7 +16,7 @@ const VerticalNav = memo(({ scrollToSection, items }: NavigationProps) => {
             className="fixed -right-vNav_to_r_viewPort top-1/2 w-[215px] -translate-y-1/2 z-50 py-10 pr-2 border-r-[.75px] border-r-luxury-gold
             bp1200_max:hidden"
         >
-            <ul className="flex flex-col gap-6">
+            <ul className="flex flex-col gap-14">
                 {items.map(item => (
                     <li
                         key={item.id}

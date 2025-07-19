@@ -10,7 +10,7 @@ export default function HeroSection({ id, className = "", children }: HeroSectio
     return (
         <section
             id={id}
-            className={`min-h-screen flex items-center justify-center px-24 ${className}`}
+            className={`min-h-screen flex items-center justify-center ${className}`}
         >
             {/* Content Container */}
             <div className={`relative z-10 w-section mx-auto duration-700 transition-opacity`}>

@@ -38,7 +38,8 @@ module.exports = {
                 elegant: "0 0 60px -10px rgba(0, 0, 0, 0.75)",
             },
             spacing: {
-                vNav_to_r_viewPort: "clamp(5rem, 10vw, 100rem)",
+                vNav_to_r_viewPort: "clamp(12rem, 15vw, 100rem)",
+                // vNav_to_r_viewPort: "clamp(5rem, 10vw, 100rem)",
             },
             width: {
                 section: "clamp(32rem, 60vw, 64rem)",
@@ -52,6 +53,11 @@ module.exports = {
                     "100%": { opacity: "1" },
                 },
             },
+        },
+        screens: {
+            bp1200_min: { min: "1200px" },
+            bp1200_max: { max: "1200px" },
+            bp940_max: { max: "940px" },
         },
     },
     plugins: [],

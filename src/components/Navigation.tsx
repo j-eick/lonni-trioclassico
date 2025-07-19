@@ -3,10 +3,17 @@ import { NavigationProps } from "../types/navigation";
 
 const Navigation = memo(({ scrollToSection, items }: NavigationProps) => {
     return (
-        <nav className="fixed top-0 left-0 right-0 z-40">
+        <nav
+            className="fixed top-0 left-0 right-0 z-40 
+                       bp1200_min:hidden"
+        >
             <div className="absolute inset-0 bg-rich-black/70 backdrop-blur-[2px]" />
-            <div className="max-w-7xl mx-auto flex justify-end items-center relative z-10 px-8 py-12">
-                <div className="hidden md:flex items-center space-x-16 text-sm uppercase tracking-widest">
+            <div
+                className="max-w-7xl mx-auto relative z-10 px-16 py-12
+                            flex justify-end items-center
+                            "
+            >
+                <div className="md:flex items-center space-x-8 text-sm uppercase tracking-widest bb">
                     {items.map(item => (
                         <button
                             key={item.id}
